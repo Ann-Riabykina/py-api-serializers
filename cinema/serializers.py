@@ -1,3 +1,4 @@
+from typing import List
 from rest_framework import serializers
 from .models import (
     Genre,
@@ -21,7 +22,7 @@ class ActorSerializer(serializers.ModelSerializer):
         model = Actor
         fields = ["id", "first_name", "last_name", "full_name"]
 
-    def get_full_name(self, obj):
+    def get_full_name(self, obj: Actor) -> str:
         return f"{obj.first_name} {obj.last_name}"
 
 
@@ -32,7 +33,7 @@ class CinemaHallSerializer(serializers.ModelSerializer):
         model = CinemaHall
         fields = ["id", "name", "rows", "seats_in_row", "capacity"]
 
-    def get_capacity(self, obj):
+    def get_capacity(self, obj: CinemaHall) -> int:
         return obj.rows * obj.seats_in_row
 
 
@@ -46,7 +47,7 @@ class MovieListSerializer(serializers.ModelSerializer):
         model = Movie
         fields = ["id", "title", "description", "duration", "genres", "actors"]
 
-    def get_actors(self, obj):
+    def get_actors(self, obj: Movie) -> List[str]:
         return [(f"{actor.first_name} "
                  f"{actor.last_name}") for actor in obj.actors.all()]
 
@@ -82,7 +83,7 @@ class MovieSessionListSerializer(serializers.ModelSerializer):
         fields = ["id", "show_time", "movie_title", "cinema_hall_name",
                   "cinema_hall_capacity"]
 
-    def get_cinema_hall_capacity(self, obj):
+    def get_cinema_hall_capacity(self, obj: MovieSession) -> int:
         return obj.cinema_hall.rows * obj.cinema_hall.seats_in_row
 
 
